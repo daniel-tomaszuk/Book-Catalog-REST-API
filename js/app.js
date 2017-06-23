@@ -1,9 +1,9 @@
 
 $(document).ready(function(){
     var URL = 'http://localhost:8000/book/';
-    var myData = [];
 
-   var GENRES = [[1, "Romans"], [2, "Obyczajowa"],[3, "Sci-fi i fantasy"],
+
+    var GENRES = [[1, "Romans"], [2, "Obyczajowa"],[3, "Sci-fi i fantasy"],
                 [4, "Literatura faktu"], [5, "Popularnonaukowa"], [6, "Poradnik"],
                 [7, "Kryminał, sensacja"]];
 
@@ -34,6 +34,8 @@ $(document).ready(function(){
 
                 dataUl1.append(response[i].author);
                 dataUl1.addClass('author');
+                dataUl1.attr('flag', '0');
+
                   // for later use with checking if add or delete additional info
                 for (var j=0; j < GENRES.length; j++){
                     if (GENRES[j][0] == response[i].genre){
@@ -41,11 +43,12 @@ $(document).ready(function(){
                     };
                 };
 
+                dataUl5.append(response[i].title);
                 dataUl3.append(response[i].isbn);
                 dataUl4.append(response[i].publisher);
-                dataUl5.append(response[i].title);
                 dataUl6.append(response[i].id);
                 dataUl6.addClass('id');
+
                 dataLi.append(dataUl6);
                 dataLi.append(dataUl1);
 //                dataLi.append(dataUl2);
@@ -61,7 +64,7 @@ $(document).ready(function(){
         }
     });
 
-    var flag = 0; // to know if add or remove additional data on click
+
     $('.author').on('click', function(){
         var urlAddon = $(this).siblings('ul.id').text();
 
@@ -82,8 +85,10 @@ $(document).ready(function(){
                 for (var j=0; j < GENRES.length; j++){
                     if (GENRES[j][0] == response.genre){
                         dataUl2.append(GENRES[j][1]);
+                        dataUl2.addClass('data');
                     };
                 };
+
                 var dataUl3 = $('<ul>');
                 dataUl3.append(response.isbn);
                 dataUl3.addClass('data');
@@ -95,21 +100,29 @@ $(document).ready(function(){
                 dataUl5.addClass('data');
 
                 // if there is only author and his id: add more info on click
-                if (flag === 0){
+                if ($(this).attr('flag') == '0'){
                 // append more information
-                    console.log('adding..')
+//                    console.log('adding..')
+                    $(this).parent().append(dataUl5);
                     $(this).parent().append(dataUl3);
                     $(this).parent().append(dataUl4);
-                    $(this).parent().append(dataUl5);
+                    $(this).parent().append(dataUl2);
+
                 };
                 //if there is already more info: remove info on click
-                if (flag === 1){
+                if ($(this).attr('flag') == '1'){
                     $(this).siblings('.data').each(function(){
 //                        console.log($(this));
                         $(this).remove();
                     });
                 };
-                if (flag === 0){ flag = 1; } else { flag = 0; };
+
+                if ($(this).attr('flag') == '0'){
+                    $(this).attr('flag', '1');
+                } else{
+                    $(this).attr('flag', '0')
+                };
+
             }.bind(this),
             error: function(response){
                 console.log('Fail!\n' + response);
@@ -117,7 +130,74 @@ $(document).ready(function(){
         });
     });
 
+    // if there is some data to POST into DB - make json and send!
+    $('#add_book').on('submit', function(event){
+        var flagAdd = 1; // flag for form validation
+        var message = $('#add_book_msg');
+        event.preventDefault();
+        console.log('add_book');
+//        var author = $('#add_book > label:nth-of-type(1) > input');
+        var author = $('#add_book > label > input[name="author"]');
+        var title = $('#add_book > label > input[name="title"]');
+        var isbn = $('#add_book > label > input[name="isbn"]');
+        var publisher = $('#add_book > label > input[name="publisher"]');
+        var genre = $('#add_book > label > select[name="genre"]');
 
+//        console.log(author.val());
+//        console.log(title.val());
+//        console.log(isbn.val());
+//        console.log(publisher.val());
+//        console.log(genre.val());
+        if(publisher.val().length <= 0){
+            message.text('Error! No Publisher!');
+            message.css('color', 'red');
+            flagAdd = 0;
+        };
+        if (isbn.val().length <= 0){
+            message.text('Error! No ISBN!');
+            message.css('color', 'red');
+            flagAdd = 0;
+        };
+        if (author.val().length <= 0 || title.val().length <= 0){
+            message.text('Error! No name or no title!');
+            message.css('color', 'red');
+            flagAdd = 0;
+        };
+
+        if (flagAdd == 1){
+            var myData = {
+                            "author": author.val(),
+                            "title": title.val(),
+                            "isbn": isbn.val(),
+                            "publisher": publisher.val(),
+                            "genre": genre.val(),
+                         };
+            console.log(myData);
+            $.ajax({
+                url: URL,
+                data: myData,
+                type: 'POST',
+                crossDomain: true,
+                dataType: 'json',
+                async: false,
+                success: function(response){
+                    console.log('Success POST!');
+                    message.text('Book added!');
+                    message.css('color', 'green');
+                    
+
+                },
+                error: function(response){
+                    console.log('Fail!\n' + response);
+                }
+            });
+
+        };
+
+
+
+
+    });
 
 
 

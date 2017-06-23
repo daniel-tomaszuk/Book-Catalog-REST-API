@@ -4,15 +4,41 @@
 
     <meta charset="UTF-8">
     <title></title>
-    <!--<link rel="stylesheet" href="css/style.css">-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="js/app.js"></script>
     <link rel="stylesheet" type="text/css" href="css/style.css">
-
 </head>
 <body>
     <h1>Books</h1>
-    <button id="show_all">Do something!</button>
+
+    <form id="add_book" method="post" action="#">
+        <label>Author:
+            <input name="author" type="text" maxlength="255" placeholder="Author"/><br>
+        </label><br>
+        <label>Title:
+            <input name="title" type="text" maxlength="255" placeholder="Title"/><br>
+        </label><br>
+        <label>ISBN:
+            <input name="isbn" type="text" maxlength="50" placeholder="ISBN"/><br>
+        </label><br>
+        <label>Publisher:
+            <input name="publisher" type="text" maxlength="255" placeholder="Publisher"/><br>
+        </label><br>
+        <label>Genre:
+            <select name="genre">
+                <option value="1">Romans</option>
+                <option value="2">Obyczajowa</option>
+                <option value="3">Sci-fi i fantasy</option>
+                <option value="4">Literatura faktu</option>
+                <option value="5">Popularnonaukowa</option>
+                <option value="6">Poradnik</option>
+                <option value="7">Kryminał, sensacja</option>
+            </select>
+        </label><br>
+        <button type="submit" name="submit" value="submit">Add book!</button>
+        <label id="add_book_msg"></label>
+    </form>
+
     <div>
         <ol id="data_db"></ol>
     </div>
