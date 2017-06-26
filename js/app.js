@@ -1,4 +1,5 @@
 $(document).ready(function(){
+
     var URL = 'http://localhost:8000/book/';
     var GENRES = [[1, "Romans"], [2, "Obyczajowa"],[3, "Sci-fi i fantasy"],
                 [4, "Literatura faktu"], [5, "Popularnonaukowa"], [6, "Poradnik"],
@@ -178,7 +179,29 @@ $(document).ready(function(){
         $('#add_book').on('submit', function(event){
             var flagAdd = 1; // flag for form validation
             var message = $('#add_book_msg');
+            var button = $('button[name="submit"]');
             event.preventDefault();
+
+            console.log(button);
+//             popover for submit
+            setTimeout(function(){
+                button.popover('show');
+            }, 200);
+
+            button.on('shown.bs.popover', function(){
+                    $(document).on('click.popover', function() {
+                        button.popover('hide'); // Hides all
+                    });
+            });
+
+            button.on('hide.bs.popover', function(){
+                    $(document).off('click.popover');
+            });
+
+
+
+
+
             console.log('add_book');
     //        var author = $('#add_book > label:nth-of-type(1) > input');
             var author = $('#add_book > label > input[name="author"]');
@@ -189,18 +212,24 @@ $(document).ready(function(){
 
             // form validation
             if(publisher.val().length <= 0){
-                message.text('Error! No Publisher!');
-                message.css('color', 'red');
+                button.attr('title', 'Error! No Publisher!');
+                button.attr('data-content', 'Add publisher!');
+//                message.text('Error! No Publisher!');
+//                message.css('color', 'red');
                 flagAdd = 0;
             };
             if (isbn.val().length <= 0){
-                message.text('Error! No ISBN!');
-                message.css('color', 'red');
+                button.attr('title', 'Error! No ISBN!');
+                button.attr('data-content', 'Add ISBN!');
+//                message.text('Error! No ISBN!');
+//                message.css('color', 'red');
                 flagAdd = 0;
             };
             if (author.val().length <= 0 || title.val().length <= 0){
-                message.text('Error! No name or no title!');
-                message.css('color', 'red');
+                button.attr('title', 'Error! No name or title!');
+                button.attr('data-content', 'Add name and title!');
+//                message.text('Error! No name or no title!');
+//                message.css('color', 'red');
                 flagAdd = 0;
             };
 
@@ -215,8 +244,11 @@ $(document).ready(function(){
                                 "genre": genre.val(),
                              };
                 modifyDB('POST', myData, '', ajaxPost);
-                message.text('Book added!');
-                message.css('color', 'green');
+                button.attr('title', '');
+                button.attr('title', 'Book added!');
+                button.attr('data-content', 'Book added into DB!');
+//                message.text('Book added!');
+                
             };
         });
     };

@@ -5,8 +5,13 @@
     <meta charset="UTF-8">
     <title></title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="js/app.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+
+    <script src="js/app.js"></script>
+
 </head>
 <body>
     <h1>Books</h1>
@@ -34,9 +39,14 @@
                 <option value="7">Kryminał, sensacja</option>
             </select>
         </label><br>
-        <button type="submit" name="submit" value="submit">Add book!</button>
+        <br>
+        <button type="submit" name="submit" value="submit" data-toggle="popover" data-trigger="focus" title="Popover title" data-content="Here's some amazing content.">Add book!</button>
+
+        <!--<a tabindex="0" class="btn btn-lg btn-danger" role="button" type="submit" data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?">Dismissible popover</a>-->
+
         <label id="add_book_msg"></label>
     </form>
+
 
     <div>
         <ol id="data_db"></ol>

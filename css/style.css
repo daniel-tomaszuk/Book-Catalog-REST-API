@@ -6,6 +6,16 @@
     font-weight: bold;
 }
 
+.popover-title {
+    color: red;
+    font-size: 20px;
+}
+.popover-content {
+    color: black;
+    font-size: 15px;
+}
+
+
 ul {
     padding-left: 0;
 }​
